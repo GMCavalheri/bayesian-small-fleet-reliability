@@ -170,3 +170,32 @@ def test_posterior_mean_lies_between_prior_mean_and_mle(
     t = t_fh / 1000
     w = beta / (beta + t)
     assert post.mean() == pytest.approx(w * prior.mean() + (1 - w) * mle, rel=1e-10)
+
+
+def test_exact_performance_of_the_mle_matches_closed_forms() -> None:
+    # MLE y/t: unbiased, variance λ/t (per 1000 FH units), so RMSE = sqrt(λ/t). Coverage
+    # must equal the exact Garwood coverage of the frequentist baseline.
+    from smallfleet.bayesian_point_estimation import exact_performance, frequentist_estimator
+    from smallfleet.frequentist_baseline import garwood_coverage
+
+    rate, t_fh = 0.25, 2100.0
+    perf = exact_performance(frequentist_estimator(0.90), rate, t_fh)
+    assert perf.bias == pytest.approx(0.0, abs=1e-12)
+    assert perf.rmse == pytest.approx(math.sqrt(rate / 2.1), rel=1e-10)
+    assert perf.coverage == pytest.approx(garwood_coverage(rate, t_fh, 0.90), abs=1e-12)
+
+
+def test_exact_performance_of_a_bayes_estimator_matches_monte_carlo() -> None:
+    # Posterior-mean bias has the closed form w·(prior mean − λ), w = β/(β + t); coverage
+    # is checked against seeded simulation (5 standard errors).
+    from smallfleet.bayesian_point_estimation import bayes_estimator, exact_performance
+
+    prior, rate, t_fh = GammaRate(4.0, 20.0), 0.3, 2100.0
+    est = bayes_estimator(prior, 0.90)
+    perf = exact_performance(est, rate, t_fh)
+    w = 20.0 / (20.0 + 2.1)
+    assert perf.bias == pytest.approx(w * (0.2 - rate), rel=1e-9)
+    rng = np.random.default_rng(4)
+    ys = rng.poisson(rate * 2.1, 20_000)
+    hits = np.mean([lo <= rate <= hi for _, lo, hi in (est(int(y), t_fh) for y in ys)])
+    assert abs(hits - perf.coverage) < 5 * math.sqrt(perf.coverage * (1 - perf.coverage) / 20_000)
