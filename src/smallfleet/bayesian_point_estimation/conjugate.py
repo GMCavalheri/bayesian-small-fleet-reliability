@@ -12,7 +12,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from scipy import optimize, stats
+from scipy import optimize, special, stats
 
 from smallfleet.data_generation import PER
 
@@ -50,15 +50,17 @@ class GammaRate:
     def sd(self) -> float:
         return math.sqrt(self.var())
 
+    # scipy.special directly: the same functions scipy.stats.gamma calls, without its
+    # per-call argument checking, which dominates the cost in the simulation studies.
     def ppf(self, q: float) -> float:
-        return float(stats.gamma.ppf(q, self.alpha, scale=self._scale()))
+        return float(special.gammaincinv(self.alpha, q)) * self._scale()
 
     def cdf(self, x: float) -> float:
-        return float(stats.gamma.cdf(x, self.alpha, scale=self._scale()))
+        return float(special.gammainc(self.alpha, max(x, 0.0) / self._scale()))
 
     def sf(self, x: float) -> float:
         """``P(λ > x)``."""
-        return float(stats.gamma.sf(x, self.alpha, scale=self._scale()))
+        return float(special.gammaincc(self.alpha, max(x, 0.0) / self._scale()))
 
     def pdf(self, x: float) -> float:
         return float(stats.gamma.pdf(x, self.alpha, scale=self._scale()))

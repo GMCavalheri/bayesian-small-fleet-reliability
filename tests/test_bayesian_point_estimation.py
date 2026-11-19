@@ -199,3 +199,22 @@ def test_exact_performance_of_a_bayes_estimator_matches_monte_carlo() -> None:
     ys = rng.poisson(rate * 2.1, 20_000)
     hits = np.mean([lo <= rate <= hi for _, lo, hi in (est(int(y), t_fh) for y in ys)])
     assert abs(hits - perf.coverage) < 5 * math.sqrt(perf.coverage * (1 - perf.coverage) / 20_000)
+
+
+def test_special_function_quantiles_match_scipy_stats() -> None:
+    g = GammaRate(2.7, 3.1)
+    for q in (1e-6, 0.05, 0.5, 0.95):
+        assert g.ppf(q) == pytest.approx(stats.gamma.ppf(q, 2.7, scale=1 / 3.1), rel=1e-12)
+    for x in (0.0, 0.3, 1.0, 4.0):
+        assert g.cdf(x) == pytest.approx(
+            stats.gamma.cdf(x, 2.7, scale=1 / 3.1), rel=1e-12, abs=1e-300
+        )
+        assert g.sf(x) == pytest.approx(stats.gamma.sf(x, 2.7, scale=1 / 3.1), rel=1e-12)
+
+
+def test_estimator_closure_returns_point_and_interval() -> None:
+    from smallfleet.bayesian_point_estimation import bayes_estimator
+
+    est = bayes_estimator(GammaRate(2.0, 10.0))
+    point, lo, hi = est(1, 2000.0)
+    assert lo < point < hi

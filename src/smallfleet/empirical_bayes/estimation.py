@@ -58,27 +58,55 @@ def marginal_loglik(alpha: float, beta: float, x: ArrayLike, t: ArrayLike) -> fl
 
 
 def fit_marginal_mle(x: ArrayLike, t: ArrayLike) -> EmpiricalBayesFit:
-    """Maximum marginal likelihood estimate of (α, β), optimised over (log μ, log α)."""
+    """Maximum marginal likelihood estimate of (α, β), optimised over (log μ, log α).
+
+    With no events at all the likelihood rises as μ → 0 and has no maximum: a ValueError.
+    """
     xa, ta = _arrays(x, t)
-    mu0 = max(xa.sum() / ta.sum(), 1e-12)
+    if xa.sum() == 0:
+        raise ValueError("no events in any unit: the marginal likelihood has no maximum")
+    mu0 = xa.sum() / ta.sum()
 
-    def nll(theta: FloatArray) -> float:
+    def nll_and_grad(theta: FloatArray) -> tuple[float, FloatArray]:
+        # Score in (log μ, log α), from ℓ_i = lnΓ(α+x) − lnΓ(α) + α ln α − (α+x) ln(α+μt)
+        # + x ln(μt) − ln x!:  ∂ℓ/∂log μ = x − (α+x)μt/(α+μt),
+        # ∂ℓ/∂log α = α[ψ(α+x) − ψ(α) + ln α + 1 − ln(α+μt) − (α+x)/(α+μt)].
         mu, alpha = np.exp(theta)
-        return -marginal_loglik(float(alpha), float(alpha / mu), xa, ta)
+        with np.errstate(all="ignore"):
+            value = -marginal_loglik(float(alpha), float(alpha / mu), xa, ta)
+            d = alpha + mu * ta
+            g_mu = np.sum(xa - (alpha + xa) * mu * ta / d)
+            g_alpha = alpha * np.sum(
+                special.digamma(alpha + xa)
+                - special.digamma(alpha)
+                + np.log(alpha)
+                + 1.0
+                - np.log(d)
+                - (alpha + xa) / d
+            )
+        if not np.isfinite(value):
+            return np.inf, np.zeros(2)
+        return value, -np.array([g_mu, g_alpha])
 
+    # Bounded quasi-Newton on (log μ, log α). The upper bound on α is the no-spread
+    # boundary: a fit that ends there is reported as pooled.
+    log_cap = float(np.log(ALPHA_CAP))
+    bounds = [(float(np.log(mu0)) - 15.0, float(np.log(mu0)) + 15.0), (-12.0, log_cap)]
     best = None
-    for log_alpha0 in (-1.0, 0.0, 2.0, 5.0):
+    for log_alpha0 in (0.0, 4.0):
         res = optimize.minimize(
-            nll,
+            nll_and_grad,
             np.array([np.log(mu0), log_alpha0]),
-            method="Nelder-Mead",
-            options={"xatol": 1e-10, "fatol": 1e-12, "maxiter": 20_000},
+            jac=True,
+            method="L-BFGS-B",
+            bounds=bounds,
+            options={"ftol": 1e-14, "gtol": 1e-10, "maxiter": 2000},
         )
         if best is None or res.fun < best.fun:
             best = res
     assert best is not None
     mu, alpha = (float(v) for v in np.exp(best.x))
-    pooled = alpha >= ALPHA_CAP or not np.isfinite(alpha)
+    pooled = best.x[1] >= log_cap - 1.0
     if pooled:
         alpha = ALPHA_CAP
         mu = float(xa.sum() / ta.sum())
@@ -93,11 +121,13 @@ def method_of_moments(x: ArrayLike, t: ArrayLike) -> EmpiricalBayesFit:
     β = μ/σ². A zero spread estimate returns the pooled fit.
     """
     xa, ta = _arrays(x, t)
+    if xa.sum() == 0:
+        raise ValueError("no events in any unit: the moment estimate of the mean is zero")
     mu = float(xa.sum() / ta.sum())
     s2 = float(np.sum((xa - mu * ta) ** 2 - mu * ta) / np.sum(ta**2))
-    if s2 <= 0 or mu <= 0:
+    if s2 <= 0:
         alpha = ALPHA_CAP
-        beta = alpha / max(mu, 1e-12)
+        beta = alpha / mu
         return EmpiricalBayesFit(alpha, beta, marginal_loglik(alpha, beta, xa, ta), True)
     alpha, beta = mu**2 / s2, mu / s2
     return EmpiricalBayesFit(alpha, beta, marginal_loglik(alpha, beta, xa, ta), False)

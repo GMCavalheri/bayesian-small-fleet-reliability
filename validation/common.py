@@ -7,6 +7,9 @@ from collections.abc import Sequence
 from pathlib import Path
 
 os.environ.setdefault("MPLBACKEND", "Agg")
+# The studies run many tiny array operations; BLAS threads only add contention.
+for _var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ.setdefault(_var, "1")
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "validation" / "results"

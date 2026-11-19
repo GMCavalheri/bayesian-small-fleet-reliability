@@ -150,8 +150,56 @@ def test_no_spread_returns_the_pooled_fit() -> None:
         kass_steffey_posteriors(fit, x, t)
 
 
+def test_no_events_has_no_estimate() -> None:
+    t = np.full(5, 3.0)
+    with pytest.raises(ValueError, match="no events"):
+        fit_marginal_mle(np.zeros(5, dtype=int), t)
+    with pytest.raises(ValueError, match="no events"):
+        method_of_moments(np.zeros(5, dtype=int), t)
+
+
 def test_inputs_are_validated() -> None:
     with pytest.raises(ValueError):
         fit_marginal_mle([1], [1.0])
     with pytest.raises(ValueError):
         method_of_moments([1, -1], [1.0, 1.0])
+
+
+def test_kass_steffey_refuses_a_non_positive_information() -> None:
+    # A real case from the operator study: four operators, one of which logs 2 events. The
+    # marginal MLE is interior (α̂ ≈ 1.65), but J22 mixes the observed ψ' term with expected
+    # terms and comes out negative, so the asymptotic variance of α̂ does not exist.
+    x = np.array([0, 0, 0, 2])
+    t = np.array([0.84, 1.26, 1.68, 2.1])
+    fit = fit_marginal_mle(x, t)
+    assert not fit.pooled
+    with pytest.raises(ValueError, match="information"):
+        kass_steffey_posteriors(fit, x, t)
+
+
+def test_analytic_score_matches_finite_differences() -> None:
+    # The fit uses an analytic gradient; check it against central differences of the
+    # marginal log-likelihood in (log mu, log alpha) at an arbitrary point.
+    mu, alpha = 0.9, 1.7
+    h = 1e-6
+
+    def ll(lmu: float, la: float) -> float:
+        a = np.exp(la)
+        return marginal_loglik(a, a / np.exp(lmu), X, T)
+
+    g_mu = (ll(np.log(mu) + h, np.log(alpha)) - ll(np.log(mu) - h, np.log(alpha))) / (2 * h)
+    g_a = (ll(np.log(mu), np.log(alpha) + h) - ll(np.log(mu), np.log(alpha) - h)) / (2 * h)
+    from scipy import special
+
+    d = alpha + mu * T
+    a_mu = np.sum(X - (alpha + X) * mu * T / d)
+    a_a = alpha * np.sum(
+        special.digamma(alpha + X)
+        - special.digamma(alpha)
+        + np.log(alpha)
+        + 1
+        - np.log(d)
+        - (alpha + X) / d
+    )
+    assert a_mu == pytest.approx(g_mu, rel=1e-6)
+    assert a_a == pytest.approx(g_a, rel=1e-6)
