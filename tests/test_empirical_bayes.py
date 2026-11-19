@@ -143,7 +143,7 @@ def test_no_spread_returns_the_pooled_fit() -> None:
     t = np.full(20, 10.0)
     x = np.full(20, 2)  # under-dispersed: every unit identical
     fit = fit_marginal_mle(x, t)
-    assert fit.pooled and fit.mean == pytest.approx(0.2)
+    assert fit.pooled is True and fit.mean == pytest.approx(0.2)
     mom = method_of_moments(x, t)
     assert mom.pooled
     with pytest.raises(ValueError):

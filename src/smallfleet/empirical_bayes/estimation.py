@@ -106,7 +106,7 @@ def fit_marginal_mle(x: ArrayLike, t: ArrayLike) -> EmpiricalBayesFit:
             best = res
     assert best is not None
     mu, alpha = (float(v) for v in np.exp(best.x))
-    pooled = best.x[1] >= log_cap - 1.0
+    pooled = bool(best.x[1] >= log_cap - 1.0)
     if pooled:
         alpha = ALPHA_CAP
         mu = float(xa.sum() / ta.sum())
