@@ -17,7 +17,7 @@ from smallfleet.empirical_bayes import (
 )
 from smallfleet.frequentist_baseline import garwood_interval
 
-from common import FIGURES, table, write_result
+from common import FIGURES, bounded, table, write_result
 
 SEED = 20261120
 COMPONENT = "starter_generator"
@@ -112,7 +112,7 @@ def main() -> None:
                         label,
                         round(rrmse, 3),
                         round(float(np.mean(hit[label])), 3),
-                        round(float(np.median(width[label])), 3),
+                        bounded(float(np.median(width[label]))),
                     ]
                 )
                 curves.setdefault((cv, label), []).append(rrmse)
@@ -174,7 +174,8 @@ def main() -> None:
                 f"{', '.join(map(str, FLEET_SIZES))} aircraft (cycled) for {MONTHS} months at "
                 f"{fh:g} FH per aircraft-month. Seeded Monte Carlo, {REPLICATES} replicates "
                 "per cell; RMSE and coverage are pooled over operators and replicates "
-                "(standard error of a coverage near 0.9 is at most 0.006). With cv = 0.5 the "
+                "(standard error of a coverage near 0.9 is at most 0.006). Widths below 0.01 "
+                "(fits on the zero-spread boundary) are reported as a bound. With cv = 0.5 the "
                 f"population 90 % range is ({prior.ppf(0.05):.3f}, {prior.ppf(0.95):.3f}).\n",
             ),
             ("Performance", perf),

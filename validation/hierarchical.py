@@ -19,7 +19,7 @@ from smallfleet.empirical_bayes import (
 from smallfleet.frequentist_baseline import garwood_interval
 from smallfleet.hierarchical_model import MeanCVHyperprior, exact_posterior
 
-from common import FIGURES, table, write_result
+from common import FIGURES, bounded, table, write_result
 
 SEED = 20261121
 COMPONENT = "starter_generator"
@@ -114,7 +114,7 @@ def operator_study() -> tuple[str, str, dict[tuple[float, str], list[float]]]:
                         label,
                         round(float(np.sqrt(np.mean(s["sq"]))), 3),
                         round(cover, 3),
-                        round(float(np.median(s["width"])), 3) if s["width"] else "—",
+                        bounded(float(np.median(s["width"]))) if s["width"] else "—",
                     ]
                 )
                 coverage_curves.setdefault((cv, label), []).append(cover)
@@ -131,7 +131,10 @@ def operator_study() -> tuple[str, str, dict[tuple[float, str], list[float]]]:
         "the population mean is centred on the large fleet's rate, 0.2, which is 20 % below "
         "the true 0.25. Coverage of a unit is read from its exact posterior CDF at the true "
         "rate. Interval widths are medians over the first "
-        f"{WIDTH_REPLICATES} replicates. Empirical Bayes is skipped in years with no events "
+        f"{WIDTH_REPLICATES} replicates; widths below 0.01 (empirical Bayes fits on the "
+        "zero-spread boundary) are reported as a bound, since their exact value depends on "
+        "where the optimiser stops on a flat likelihood. Empirical Bayes is skipped in years "
+        "with no events "
         "(its coverage is over the remaining years).\n"
     )
     return setup, perf, coverage_curves

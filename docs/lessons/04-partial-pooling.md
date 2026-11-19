@@ -202,7 +202,7 @@ the true 0.25**, so the method is not being helped. Excerpt from
 | cv | operators | method | RMSE / λ | 90 % coverage | width / λ |
 |---|---|---|---|---|---|
 | 0.5 | 4 | no pooling | 1.97 | 0.979 | 10.8 |
-| | | empirical Bayes, Kass-Steffey | 1.61 | 0.163 | 0.004 |
+| | | empirical Bayes, Kass-Steffey | 1.61 | 0.163 | < 0.01 |
 | | | hierarchical Bayes | 1.10 | 0.952 | 2.52 |
 | 0.5 | 32 | no pooling | 1.63 | 0.979 | 7.49 |
 | | | empirical Bayes, Kass-Steffey | 0.98 | 0.501 | 1.09 |

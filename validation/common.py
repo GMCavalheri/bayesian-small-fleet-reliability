@@ -31,6 +31,16 @@ def fmt(x: object, digits: int = 4) -> str:
     return f"{x:.{digits}g}"
 
 
+def bounded(x: float, floor: float = 0.01, digits: int = 3) -> object:
+    """``x`` rounded, or ``"< floor"`` below it.
+
+    Used for quantities that are essentially zero but whose exact tiny value depends on
+    where an optimiser stops on a flat likelihood (it can differ between CPUs), so that
+    results still reproduce byte for byte everywhere.
+    """
+    return f"< {floor:g}" if x < floor else round(x, digits)
+
+
 def table(headers: Sequence[str], rows: Sequence[Sequence[object]]) -> str:
     lines = ["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers)]
     lines += ["| " + " | ".join(fmt(c) for c in row) + " |" for row in rows]

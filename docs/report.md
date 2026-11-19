@@ -90,7 +90,7 @@ Operators of 2 to 12 business jets, one year, population cv 0.5:
 | operators | method | RMSE / λ | 90 % coverage | width / λ |
 |---|---|---|---|---|
 | 4 | no pooling | 1.97 | 0.979 | 10.8 |
-| 4 | empirical Bayes (Kass-Steffey) | 1.61 | 0.163 | 0.004 |
+| 4 | empirical Bayes (Kass-Steffey) | 1.61 | 0.163 | < 0.01 |
 | 4 | hierarchical Bayes | 1.10 | 0.952 | 2.52 |
 | 32 | no pooling | 1.63 | 0.979 | 7.49 |
 | 32 | empirical Bayes (Kass-Steffey) | 0.98 | 0.501 | 1.09 |

@@ -19,7 +19,7 @@ One draw (seed 20261122): 8 operators, population cv 0.5, 5 events in 21,000 FH.
 
 ## Operator study: setup
 
-Same setting as the empirical Bayes study (component `starter_generator`, operators of 2, 3, 4, 5, 6, 8, 10, 12 business jets cycled, 12 months), with a new seed (20261121) and 300 replicates per cell; all methods see the same draws. Hierarchical Bayes is the exact posterior (oracle, 121×121 grid) under the hyperprior μ ~ LogNormal(log 0.2, 1), cv ~ HalfNormal(1): the population mean is centred on the large fleet's rate, 0.2, which is 20 % below the true 0.25. Coverage of a unit is read from its exact posterior CDF at the true rate. Interval widths are medians over the first 40 replicates. Empirical Bayes is skipped in years with no events (its coverage is over the remaining years).
+Same setting as the empirical Bayes study (component `starter_generator`, operators of 2, 3, 4, 5, 6, 8, 10, 12 business jets cycled, 12 months), with a new seed (20261121) and 300 replicates per cell; all methods see the same draws. Hierarchical Bayes is the exact posterior (oracle, 121×121 grid) under the hyperprior μ ~ LogNormal(log 0.2, 1), cv ~ HalfNormal(1): the population mean is centred on the large fleet's rate, 0.2, which is 20 % below the true 0.25. Coverage of a unit is read from its exact posterior CDF at the true rate. Interval widths are medians over the first 40 replicates; widths below 0.01 (empirical Bayes fits on the zero-spread boundary) are reported as a bound, since their exact value depends on where the optimiser stops on a flat likelihood. Empirical Bayes is skipped in years with no events (its coverage is over the remaining years).
 
 ## Operator study: performance
 
@@ -27,28 +27,28 @@ Same setting as the empirical Bayes study (component `starter_generator`, operat
 |---|---|---|---|---|---|
 | 0.25 | 4 | no pooling | 1.684 | 0.981 | 10.08 |
 | 0.25 | 4 | hierarchical Bayes | 0.597 | 0.987 | 2.476 |
-| 0.25 | 4 | empirical Bayes, plug-in | 0.954 | 0.108 | 0.003 |
-| 0.25 | 4 | empirical Bayes, Kass-Steffey | 0.954 | 0.119 | 0.003 |
+| 0.25 | 4 | empirical Bayes, plug-in | 0.954 | 0.108 | < 0.01 |
+| 0.25 | 4 | empirical Bayes, Kass-Steffey | 0.954 | 0.119 | < 0.01 |
 | 0.25 | 8 | no pooling | 1.403 | 0.979 | 6.893 |
 | 0.25 | 8 | hierarchical Bayes | 0.514 | 0.949 | 2.145 |
-| 0.25 | 8 | empirical Bayes, plug-in | 0.602 | 0.228 | 0.005 |
-| 0.25 | 8 | empirical Bayes, Kass-Steffey | 0.602 | 0.243 | 0.005 |
+| 0.25 | 8 | empirical Bayes, plug-in | 0.602 | 0.228 | < 0.01 |
+| 0.25 | 8 | empirical Bayes, Kass-Steffey | 0.602 | 0.243 | < 0.01 |
 | 0.25 | 16 | no pooling | 1.462 | 0.977 | 6.821 |
 | 0.25 | 16 | hierarchical Bayes | 0.482 | 0.951 | 1.776 |
-| 0.25 | 16 | empirical Bayes, plug-in | 0.529 | 0.329 | 0.004 |
-| 0.25 | 16 | empirical Bayes, Kass-Steffey | 0.529 | 0.353 | 0.004 |
+| 0.25 | 16 | empirical Bayes, plug-in | 0.529 | 0.329 | < 0.01 |
+| 0.25 | 16 | empirical Bayes, Kass-Steffey | 0.529 | 0.353 | < 0.01 |
 | 0.25 | 32 | no pooling | 1.484 | 0.977 | 6.764 |
 | 0.25 | 32 | hierarchical Bayes | 0.393 | 0.963 | 1.558 |
-| 0.25 | 32 | empirical Bayes, plug-in | 0.407 | 0.413 | 0.006 |
-| 0.25 | 32 | empirical Bayes, Kass-Steffey | 0.407 | 0.436 | 0.006 |
+| 0.25 | 32 | empirical Bayes, plug-in | 0.407 | 0.413 | < 0.01 |
+| 0.25 | 32 | empirical Bayes, Kass-Steffey | 0.407 | 0.436 | < 0.01 |
 | 0.5 | 4 | no pooling | 1.971 | 0.979 | 10.8 |
 | 0.5 | 4 | hierarchical Bayes | 1.1 | 0.952 | 2.524 |
-| 0.5 | 4 | empirical Bayes, plug-in | 1.613 | 0.152 | 0.004 |
-| 0.5 | 4 | empirical Bayes, Kass-Steffey | 1.613 | 0.163 | 0.004 |
+| 0.5 | 4 | empirical Bayes, plug-in | 1.613 | 0.152 | < 0.01 |
+| 0.5 | 4 | empirical Bayes, Kass-Steffey | 1.613 | 0.163 | < 0.01 |
 | 0.5 | 8 | no pooling | 1.668 | 0.98 | 7.4 |
 | 0.5 | 8 | hierarchical Bayes | 0.917 | 0.917 | 2.053 |
-| 0.5 | 8 | empirical Bayes, plug-in | 1.107 | 0.298 | 0.007 |
-| 0.5 | 8 | empirical Bayes, Kass-Steffey | 1.107 | 0.321 | 0.007 |
+| 0.5 | 8 | empirical Bayes, plug-in | 1.107 | 0.298 | < 0.01 |
+| 0.5 | 8 | empirical Bayes, Kass-Steffey | 1.107 | 0.321 | < 0.01 |
 | 0.5 | 16 | no pooling | 1.844 | 0.977 | 7.37 |
 | 0.5 | 16 | hierarchical Bayes | 0.928 | 0.901 | 1.991 |
 | 0.5 | 16 | empirical Bayes, plug-in | 1.012 | 0.393 | 0.63 |
