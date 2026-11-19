@@ -3,5 +3,5 @@ hidden_failure_rate_per_1000fh,0.02,"illustrative assumption, no field data: a p
 unavailability_target,0.01,"illustrative assumption: the device may be failed and undetected at most 1 % of the time on average; the classical failure-finding interval is then about 2 x 0.01 / rate (Moubray 1997)"
 risk_quantile,0.9,"illustrative assumption: the risk-based interval holds the unavailability target with 90 % posterior probability"
 cost_false_alarm,1.0,"illustrative assumption in relative cost units: one engineering investigation that finds nothing"
-cost_missed_degradation,9.0,"illustrative assumption in relative cost units: one month of a degraded component left uninvestigated (extra removals, delays)"
+cost_missed_degradation,4.0,"illustrative assumption in relative cost units: one month of a degraded component left uninvestigated (extra removals, delays) costs as much as four investigations; the alert threshold is then 1/(1 + 4) = 0.2"
 cost_delay,0.5,"illustrative assumption in relative cost units: the extra loss of postponing a needed investigation by one month, counted only when the rate is above target"

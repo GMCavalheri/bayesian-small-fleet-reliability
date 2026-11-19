@@ -25,7 +25,7 @@ COSTS = AlertCosts(false_alarm=1.0, missed=9.0, delay=0.5)
 
 def test_parameters_table_has_every_value_with_a_basis() -> None:
     params = load_decision_parameters()
-    assert params["cost_missed_degradation"] == 9.0
+    assert params["cost_missed_degradation"] == 4.0
     assert 0 < params["unavailability_target"] < 1
 
 
