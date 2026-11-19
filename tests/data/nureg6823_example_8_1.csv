@@ -1,0 +1,68 @@
+# NUREG/CR-6823 (Atwood et al. 2003), Example 8.1: unplanned scrams at power (x) and 1000 critical hours (t), 66 US plants, 1984 (data from Martz et al. 1999). Totals 361 and 374.229 match the handbook's Table 8.1.
+plant,scrams,critical_hours_thousands
+"Arkansas 1",3,6.2500
+"Farley 2",6,8.3333
+"Monticello",0,0.8106
+"San Onofre 2",5,5.2632
+"Arkansas 2",12,7.6433
+"Fort Calhoun",1,5.2632
+"North Anna 1",8,4.7619
+"San Onofre 3",7,5.0725
+"Beaver Valley 1",4,6.4516
+"Ginna",1,6.6667
+"North Anna 2",4,6.1538
+"St. Lucie 1",6,5.5556
+"Big Rock Point",2,6.8966
+"Grand Gulf",7,2.0896
+"Oconee 1",3,7.5000
+"St. Lucie 2",9,7.3770
+"Brunswick 2",3,2.6549
+"Haddam Neck",3,6.5217
+"Oconee 2",0,8.7840
+"Summer",11,5.5556
+"Callaway",12,1.5038
+"Hatch 1",7,5.6452
+"Oconee 3",4,6.5574
+"Surry 1",8,5.2980
+"Calvert Cliffs 1",5,7.5758
+"Hatch 2",7,3.1111
+"Oyster Creek",2,1.6949
+"Surry 2",14,7.4468
+"Cook 1",3,8.1081
+"Indian Point 2",4,4.7059
+"Palisades",1,1.5625
+"Susquehanna 1",7,6.5421
+"Cook 2",7,5.3030
+"Indian Point 3",7,6.9307
+"Pt. Beach 1",0,6.4201
+"Susquehanna 2",7,2.1472
+"Cooper Station",3,6.0000
+"Kewaunee",4,7.5472
+"Pt. Beach 2",0,7.5442
+"Turkey Point 3",8,7.3394
+"Crystal River 3",2,8.3333
+"LaSalle 1",9,6.2937
+"Prairie Island 1",4,8.3333
+"Turkey Point 4",9,5.0847
+"Davis-Besse",4,5.5556
+"LaSalle 2",11,5.4726
+"Prairie Island 2",0,7.8440
+"Vermont Yank.",2,7.1429
+"Diablo Canyon 1",5,1.0846
+"Maine Yankee",7,6.6667
+"Quad Cities 1",3,4.7619
+"Wash. Nucl. 2",23,4.3643
+"Dresden 2",3,6.5217
+"McGuire 1",4,6.0606
+"Quad Cities 2",2,6.8966
+"Zion 1",6,6.3158
+"Dresden 3",8,3.8835
+"McGuire 2",16,6.9869
+"Robinson 2",0,0.6161
+"Zion 2",7,6.3063
+"Duane Arnold",6,6.5934
+"Millstone 1",0,6.9902
+"Salem 1",10,2.6738
+"Farley 1",2,6.8966
+"Millstone 2",3,8.5714
+"Salem 2",10,3.3898
