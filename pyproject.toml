@@ -1,6 +1,6 @@
 [project]
 name = "smallfleet"
-version = "0.1.0"
+version = "1.0.0"
 description = "Bayesian reliability for small fleets: failure-rate estimates and alert thresholds from sparse data, with informative priors from a related large fleet and partial pooling across components, compared against the classical frequentist alert-level method."
 readme = "README.md"
 license = { text = "MIT" }
