@@ -1,0 +1,7 @@
+component,ata_chapter,large_fleet_rate_per_1000fh,small_fleet_rate_per_1000fh,basis
+air_data_computer,34,0.10,0.12,"illustrative assumption, no field data: unscheduled-removal rate of an avionics LRU shared by both fleets (MTBUR 10 000 FH on the large fleet); the small fleet runs 20 % higher because of shorter sectors and longer ground soaks"
+starter_generator,24,0.20,0.25,"illustrative assumption, no field data: an electromechanical unit (MTBUR 5000 FH on the large fleet), 25 % higher on the small fleet because business jets do more starts per flight hour"
+fuel_boost_pump,28,0.08,0.08,"illustrative assumption, no field data: a pump whose wear depends on running hours, so both fleets share one rate (MTBUR 12 500 FH)"
+bleed_air_valve,36,0.30,0.45,"illustrative assumption, no field data: a valve sensitive to cycles (MTBUR 3300 FH on the large fleet); 50 % higher on the small fleet, the case where a borrowed prior is optimistic"
+weather_radar,34,0.05,0.04,"illustrative assumption, no field data: a reliable avionics LRU (MTBUR 20 000 FH); slightly lower on the small fleet, which flies above most weather"
+wheel_brake_assembly,32,0.15,0.18,"illustrative assumption, no field data: removal driven by wear and landings (MTBUR 6700 FH on the large fleet), 20 % higher on the small fleet"

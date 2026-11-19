@@ -1,0 +1,3 @@
+fleet,fh_per_aircraft_month,basis
+business_jet,35,"illustrative assumption: about 420 flight hours per aircraft per year, the order of a few hundred hours a year usually quoted for business jets; explored by fleet size, which scales exposure the same way"
+commercial_narrowbody,250,"illustrative assumption: about 3000 flight hours per aircraft per year, the order of a short-haul narrow-body airliner; used only for the large fleet that supplies the prior"
