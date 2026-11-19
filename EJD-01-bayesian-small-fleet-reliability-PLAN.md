@@ -48,12 +48,12 @@ bayesian-small-fleet-reliability/
 ```
 
 ## Execution Plan
-- [ ] **Phase 1 — Frequentist baseline and failure mode demonstration**: implement the classical Poisson alert-level method on synthetic small-fleet data, document its instability as fleet size shrinks.
-- [ ] **Phase 2 — Bayesian point estimation**: implement Gamma-Poisson conjugate Bayesian estimation with informative priors, validate against closed-form conjugate posterior results.
-- [ ] **Phase 3 — Hierarchical model**: implement partial pooling across multiple components/fleets using PyMC/NumPyro, validate convergence diagnostics (R-hat, effective sample size).
-- [ ] **Phase 4 — Bayesian alert thresholds**: reformulate alert logic in terms of posterior probability of exceedance, compare trigger behavior against the classical method.
-- [ ] **Phase 5 — Simulation study**: run a systematic comparison across simulated fleet sizes, produce a clear "when does Bayesian pooling help" result.
-- [ ] **Phase 6 — Documentation and publishing**: written methodology comparison, visualizations of posterior distributions and simulation results.
+- [x] **Phase 1 — Frequentist baseline and failure mode demonstration**: implement the classical Poisson alert-level method on synthetic small-fleet data, document its instability as fleet size shrinks.
+- [x] **Phase 2 — Bayesian point estimation**: implement Gamma-Poisson conjugate Bayesian estimation with informative priors, validate against closed-form conjugate posterior results.
+- [x] **Phase 3 — Hierarchical model**: implement partial pooling across multiple components/fleets using PyMC/NumPyro, validate convergence diagnostics (R-hat, effective sample size).
+- [x] **Phase 4 — Bayesian alert thresholds**: reformulate alert logic in terms of posterior probability of exceedance, compare trigger behavior against the classical method.
+- [x] **Phase 5 — Simulation study**: run a systematic comparison across simulated fleet sizes, produce a clear "when does Bayesian pooling help" result.
+- [x] **Phase 6 — Documentation and publishing**: written methodology comparison, visualizations of posterior distributions and simulation results.
 
 ## Validation Strategy
 - Bayesian point estimates validated against closed-form Gamma-Poisson conjugate posterior formulas for simple cases.
